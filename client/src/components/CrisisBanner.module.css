@@ -1,0 +1,26 @@
+.banner {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--text);
+  color: var(--bg);
+  font-size: 0.8125rem;
+}
+.inner {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0.6rem 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.25rem;
+}
+.label { font-weight: 600; white-space: nowrap; }
+.divider {
+  width: 1px;
+  height: 1em;
+  background: rgba(246, 247, 243, 0.35);
+}
+.text { margin: 0; flex: 1; }
+.text a { color: #a8c4ad; text-decoration: underline; }
+.text a:hover { color: var(--bg); }

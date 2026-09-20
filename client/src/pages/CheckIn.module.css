@@ -1,0 +1,178 @@
+.page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+}
+
+.main {
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 4rem 1.5rem;
+}
+
+.inner {
+  width: 100%;
+  max-width: 32rem;
+}
+
+.title {
+  font-family: var(--font-serif);
+  font-size: clamp(1.6rem, 3vw, 2rem);
+  font-weight: 500;
+  margin: 0 0 0.4rem;
+}
+
+.lead {
+  color: #4a5a52;
+  margin: 0 0 2rem;
+  font-size: 0.975rem;
+}
+
+.moodScale {
+  border: none;
+  padding: 0;
+  margin: 0 0 1.75rem;
+}
+
+.legend {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  margin-bottom: 0.75rem;
+  color: var(--text);
+}
+
+.scaleRow {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.moodBtn {
+  flex: 1;
+  min-width: 4.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.75rem 0.5rem;
+  background: #fff;
+  border: 1px solid var(--divider);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease, transform 0.1s ease;
+  color: var(--text);
+}
+
+.moodBtn:hover {
+  border-color: var(--calm);
+  background: #f0f4f1;
+}
+
+.moodBtn.active {
+  border-color: var(--calm);
+  background: #e8f0ea;
+  box-shadow: 0 0 0 2px rgba(107, 143, 113, 0.25);
+}
+
+.moodBtn:active {
+  transform: scale(0.97);
+}
+
+.num {
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.label {
+  font-size: 0.7rem;
+  color: #5a6b62;
+  text-align: center;
+}
+
+.field {
+  margin-bottom: 1.5rem;
+}
+
+.field label {
+  display: block;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  margin-bottom: 0.35rem;
+}
+
+.optional {
+  font-weight: 400;
+  color: #6b7a72;
+}
+
+.field textarea {
+  width: 100%;
+  padding: 0.7rem 0.85rem;
+  border: 1px solid var(--divider);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--text);
+  resize: vertical;
+  min-height: 5rem;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.field textarea:focus {
+  outline: none;
+  border-color: var(--calm);
+  box-shadow: 0 0 0 3px rgba(107, 143, 113, 0.18);
+}
+
+.field textarea::placeholder {
+  color: #9aa89e;
+}
+
+.primaryBtn {
+  display: block;
+  width: 100%;
+  padding: 0.8rem 1.25rem;
+  background: var(--calm);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 0.975rem;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+
+.primaryBtn:hover:not(:disabled) {
+  background: #5a7d60;
+}
+
+.primaryBtn:active:not(:disabled) {
+  transform: scale(0.985);
+}
+
+.primaryBtn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.error {
+  color: var(--urgent);
+  font-size: 0.875rem;
+  margin: 0 0 1rem;
+}
+
+.note {
+  margin-top: 1.75rem;
+  font-size: 0.8125rem;
+  color: #6b7a72;
+  text-align: center;
+}
+
+.note a {
+  color: var(--calm);
+  font-weight: 500;
+}

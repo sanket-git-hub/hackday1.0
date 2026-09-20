@@ -1,0 +1,131 @@
+/* Booking.module.css */
+.page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+}
+.main {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  padding: 4rem 1.5rem;
+}
+.inner {
+  width: 100%;
+  max-width: 32rem;
+}
+.title {
+  font-family: var(--font-serif);
+  font-size: 1.75rem;
+  font-weight: 500;
+  margin: 0 0 0.4rem;
+}
+.lead {
+  color: #4a5a52;
+  margin: 0 0 1.5rem;
+}
+.muted { color: #6b7a72; }
+.body {
+  color: #4a5a52;
+  margin: 0 0 1.5rem;
+}
+.slots {
+  border: none;
+  padding: 0;
+  margin: 0 0 1.5rem;
+}
+.legend {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  margin-bottom: 0.65rem;
+}
+.slotGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.slotBtn {
+  padding: 0.6rem 0.9rem;
+  background: #fff;
+  border: 1px solid var(--divider);
+  border-radius: 8px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  color: var(--text);
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+.slotBtn:hover:not(:disabled) {
+  border-color: var(--calm);
+  background: #f0f4f1;
+}
+.slotBtn.active {
+  border-color: var(--calm);
+  background: #e8f0ea;
+  box-shadow: 0 0 0 2px rgba(107, 143, 113, 0.2);
+}
+.slotBtn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.field {
+  margin-bottom: 1.25rem;
+}
+.field label {
+  display: block;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  margin-bottom: 0.35rem;
+}
+.opt {
+  font-weight: 400;
+  color: #6b7a72;
+}
+.field textarea {
+  width: 100%;
+  padding: 0.65rem 0.85rem;
+  border: 1px solid var(--divider);
+  border-radius: 8px;
+  background: #fff;
+  resize: vertical;
+  min-height: 4.5rem;
+}
+.field textarea:focus {
+  outline: none;
+  border-color: var(--calm);
+  box-shadow: 0 0 0 3px rgba(107, 143, 113, 0.18);
+}
+.primary {
+  display: block;
+  width: 100%;
+  text-align: center;
+  padding: 0.8rem 1.25rem;
+  background: var(--calm);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+.primary:hover:not(:disabled) {
+  background: #5a7d60;
+  color: #fff;
+}
+.primary:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+.error {
+  color: var(--urgent);
+  font-size: 0.875rem;
+  margin: 0 0 1rem;
+}
+.footer {
+  margin-top: 1.75rem;
+  font-size: 0.875rem;
+}
+.footer a {
+  color: var(--calm);
+  font-weight: 500;
+}
