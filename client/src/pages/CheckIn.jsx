@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import styles from "./CheckIn.module.css";
 import CrisisBanner from "../components/CrisisBanner";
+import { useAuth } from "../context/AuthContext";
 
 const MOOD_LABELS = {
   1: "Very low",
@@ -13,6 +14,7 @@ const MOOD_LABELS = {
 
 export default function CheckIn() {
   const navigate = useNavigate();
+  const { getAuthHeader } = useAuth();
   const [mood, setMood] = useState(null);
   const [freeText, setFreeText] = useState("");
   const [loading, setLoading] = useState(false);
@@ -27,20 +29,25 @@ export default function CheckIn() {
     setError("");
     setLoading(true);
     try {
-      const token = localStorage.getItem("token");
       const res = await fetch("/api/checkins", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          ...getAuthHeader(), // sends your JWT if logged in
         },
-        body: JSON.stringify({ mood_score: mood, free_text: freeText || null }),
+        body: JSON.stringify({
+          mood_score: mood,
+          free_text: freeText || null,
+        }),
       });
+
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
         throw new Error(data.message || "Check-in failed");
       }
+
       const data = await res.json();
+
       if (data.urgency === "urgent") {
         navigate("/result/urgent", { state: { checkin: data } });
       } else if (data.urgency === "needs_attention") {

@@ -2,9 +2,16 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styles from "./CounselorDashboard.module.css";
 import CrisisBanner from "../components/CrisisBanner";
+import { useAuth } from "../context/AuthContext";
 
 export default function CounselorDashboard() {
   const navigate = useNavigate();
+  const {
+    getAuthHeader,
+    isCounselor,
+    loading: authLoading,
+    signOut,
+  } = useAuth();
   const [bookings, setBookings] = useState([]);
   const [flagged, setFlagged] = useState([]);
   const [tab, setTab] = useState("bookings");
@@ -12,19 +19,19 @@ export default function CounselorDashboard() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    const role = localStorage.getItem("role");
-    if (!token || role !== "counselor") {
+    if (authLoading) return;
+
+    if (!isCounselor) {
       navigate("/login");
       return;
     }
 
     Promise.all([
       fetch("/api/counselor/bookings", {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { ...getAuthHeader() },
       }).then((r) => (r.ok ? r.json() : [])),
       fetch("/api/counselor/flagged", {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { ...getAuthHeader() },
       }).then((r) => (r.ok ? r.json() : [])),
     ])
       .then(([b, f]) => {
@@ -33,16 +40,15 @@ export default function CounselorDashboard() {
       })
       .catch(() => setError("Could not load dashboard data."))
       .finally(() => setLoading(false));
-  }, [navigate]);
+  }, [authLoading, isCounselor, getAuthHeader, navigate]);
 
   async function updateStatus(id, status) {
-    const token = localStorage.getItem("token");
     try {
       const res = await fetch(`/api/bookings/${id}/status`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          ...getAuthHeader(),
         },
         body: JSON.stringify({ status }),
       });
@@ -55,9 +61,8 @@ export default function CounselorDashboard() {
     }
   }
 
-  function logout() {
-    localStorage.removeItem("token");
-    localStorage.removeItem("role");
+  async function handleLogout() {
+    await signOut();
     navigate("/login");
   }
 
@@ -67,7 +72,11 @@ export default function CounselorDashboard() {
       <header className={styles.header}>
         <div className={styles.headerInner}>
           <h1 className={styles.title}>Counselor dashboard</h1>
-          <button type="button" className={styles.logout} onClick={logout}>
+          <button
+            type="button"
+            className={styles.logout}
+            onClick={handleLogout}
+          >
             Sign out
           </button>
         </div>
@@ -92,7 +101,8 @@ export default function CounselorDashboard() {
         </div>
 
         {error && <p className={styles.error}>{error}</p>}
-        {loading ? (
+
+        {loading || authLoading ? (
           <p className={styles.muted}>Loading…</p>
         ) : tab === "bookings" ? (
           bookings.length === 0 ? (

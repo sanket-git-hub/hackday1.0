@@ -2,8 +2,10 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styles from "./Booking.module.css";
 import CrisisBanner from "../components/CrisisBanner";
+import { useAuth } from "../context/AuthContext";
 
 export default function Booking() {
+  const { getAuthHeader, user } = useAuth();
   const [slots, setSlots] = useState([]);
   const [selected, setSelected] = useState(null);
   const [note, setNote] = useState("");
@@ -22,8 +24,8 @@ export default function Booking() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    const token = localStorage.getItem("token");
-    if (!token) {
+
+    if (!user) {
       setError("Please sign in to book a slot.");
       return;
     }
@@ -31,21 +33,28 @@ export default function Booking() {
       setError("Please choose a time slot.");
       return;
     }
+
     setError("");
     setSubmitting(true);
+
     try {
       const res = await fetch("/api/bookings", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          ...getAuthHeader(),
         },
-        body: JSON.stringify({ slot_id: selected, note: note || null }),
+        body: JSON.stringify({
+          slot_id: selected,
+          note: note || null,
+        }),
       });
+
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
         throw new Error(data.message || "Booking failed");
       }
+
       setSuccess(true);
     } catch (err) {
       setError(err.message);
@@ -99,7 +108,9 @@ export default function Booking() {
                     <button
                       key={s.id}
                       type="button"
-                      className={`${styles.slotBtn} ${selected === s.id ? styles.active : ""}`}
+                      className={`${styles.slotBtn} ${
+                        selected === s.id ? styles.active : ""
+                      }`}
                       onClick={() => setSelected(s.id)}
                       disabled={!s.is_available}
                     >

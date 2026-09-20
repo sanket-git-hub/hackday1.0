@@ -1,7 +1,8 @@
 const express = require("express");
 const { query } = require("../db");
 const { requireAuth, requireRole } = require("../middleware/auth");
-
+import { useAuth } from "../context/AuthContext";
+const { getAuthHeader } = useAuth();
 const router = express.Router();
 
 // GET available counselor slots

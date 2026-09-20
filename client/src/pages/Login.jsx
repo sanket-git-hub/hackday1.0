@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { Row, Col } from "react-bootstrap";
 import styles from "./Auth.module.css";
 import CrisisBanner from "../components/CrisisBanner";
+import { supabase } from "../lib/supabase";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -11,31 +13,25 @@ export default function Login() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  async function handleSubmit(e) {
-    e.preventDefault();
-    setError("");
-    setLoading(true);
-    try {
-      const res = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        throw new Error(data.message || "Login failed");
-      }
-      const data = await res.json();
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("role", data.user.role);
-      navigate(data.user.role === "counselor" ? "/counselor" : "/checkin");
-    } catch (err) {
-      setError(err.message || "Something went wrong. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  }
+ async function handleSubmit(e) {
+   e.preventDefault();
+   setError("");
+   setLoading(true);
+   try {
+     const { data, error } = await supabase.auth.signInWithPassword({
+       email,
+       password,
+     });
+     if (error) throw error;
 
+     const role = data.user?.user_metadata?.role || "student";
+     navigate(role === "counselor" ? "/counselor" : "/checkin");
+   } catch (err) {
+     setError(err.message || "Login failed");
+   } finally {
+     setLoading(false);
+   }
+ }
   return (
     <div className={styles.page}>
       <CrisisBanner />

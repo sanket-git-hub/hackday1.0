@@ -3,7 +3,39 @@ import { Link, useNavigate } from "react-router-dom";
 import { Row, Col } from "react-bootstrap";
 import styles from "./Auth.module.css";
 import CrisisBanner from "../components/CrisisBanner";
+import { supabase } from "../lib/supabase";
+import { useNavigate } from "react-router-dom";
+// ... other imports
 
+async function handleSubmit(e) {
+  e.preventDefault();
+  setError("");
+  setLoading(true);
+  try {
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          name,
+          role, // "student" or "counselor"
+        },
+      },
+    });
+    if (error) throw error;
+
+    if (data.session) {
+      // Email confirmation is disabled → session is returned immediately
+      navigate(role === "counselor" ? "/counselor" : "/checkin");
+    } else {
+      setError("Check your email to confirm your account, then sign in.");
+    }
+  } catch (err) {
+    setError(err.message || "Signup failed");
+  } finally {
+    setLoading(false);
+  }
+}
 export default function Signup() {
   const navigate = useNavigate();
   const [name, setName] = useState("");
@@ -13,31 +45,7 @@ export default function Signup() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  async function handleSubmit(e) {
-    e.preventDefault();
-    setError("");
-    setLoading(true);
-    try {
-      const res = await fetch("/api/auth/signup", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password, role }),
-      });
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        throw new Error(data.message || "Signup failed");
-      }
-      const data = await res.json();
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("role", data.user.role);
-      navigate(data.user.role === "counselor" ? "/counselor" : "/checkin");
-    } catch (err) {
-      setError(err.message || "Something went wrong. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  }
-
+//   
   return (
     <div className={styles.page}>
       <CrisisBanner />
