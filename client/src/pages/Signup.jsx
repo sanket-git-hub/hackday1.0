@@ -4,8 +4,7 @@ import { Row, Col } from "react-bootstrap";
 import styles from "./Auth.module.css";
 import CrisisBanner from "../components/CrisisBanner";
 import { supabase } from "../lib/supabase";
-import { useNavigate } from "react-router-dom";
-// ... other imports
+
 
 async function handleSubmit(e) {
   e.preventDefault();
